@@ -49,3 +49,24 @@ Types: feat, fix, docs, chore, refactor, test
 ### known-issues
 - Android emulator deferred (SDK 36 license quirk)
 - Development target is Linux desktop for now
+
+---
+
+## 2026-10-05 — Phase 02 Complete
+
+### feat
+- 5 Drift tables: challenges, savings_records, user_profiles, achievements, notification_logs
+- 4 repositories: ChallengeRepository, SavingsRepository, ProfileRepository, AchievementRepository
+- `SavingsRepository._recomputeChallenge()` — auto-completes / reverts challenges in transaction
+- Riverpod providers in `lib/core/providers/repository_providers.dart`
+- 6 default achievements seeded
+- 4 unit tests using in-memory SQLite (all passing)
+
+### chore
+- Upgraded dep stack to Riverpod 3, Drift 2.28, go_router 18
+- Installed `libsqlite3-dev` for native test support
+- Tagged v0.2.0-phase-02
+
+### fix
+- Removed unused `package:drift/drift.dart` import in seed file
+- Pinned drift/drift_dev/sqlite3_flutter_libs to compatible versions

@@ -4,20 +4,13 @@
 
 ## Overall Status
 
-MVP Progress: █░░░░░░░░░░░░░░░░░░░ 8%
-
-Phases complete: 1 / 12
-Phases in progress: 0
-Current phase: Awaiting Phase 02
-
-
 
 ## Phase Tracker
 
 | # | Phase | Status | Started | Completed |
 |---|-------|--------|---------|-----------|
 | 01 | Foundation | 🟢 Complete | 2026-10-05 | 2026-10-05 |
-| 02 | Core Models | 🔵 Not started | — | — |
+| 02 | Core Models | 🟢 Complete | 2026-10-05 | 2026-10-05 |
 | 03 | Onboarding | 🔵 Not started | — | — |
 | 04 | Create Challenge | 🔵 Not started | — | — |
 | 05 | Check-in | 🔵 Not started | — | — |
@@ -33,24 +26,25 @@ Current phase: Awaiting Phase 02
 
 ## Current Focus
 
-Nothing active. Ready to begin Phase 02 — Core Models.
+Phase 02 complete. Ready to begin Phase 03 — Onboarding.
 
 ## Recent Milestones
 
+- **2026-10-05** — Phase 02 complete (v0.2.0-phase-02)
 - **2026-10-05** — Phase 01 complete (v0.1.0-phase-01)
 - **2026-10-05** — Project spec completed
-- **2026-10-05** — Documentation structure created
 
 ## Next Up
 
-→ Begin Phase 02 — Core Models
+→ Begin Phase 03 — Onboarding
 → See [CURRENT_PHASE.md](CURRENT_PHASE.md)
 
 ## Metrics
 
 | Metric | Value | Target |
 |--------|-------|--------|
-| Phases complete | 1 | 12 |
+| Phases complete | 2 | 12 |
+| Unit tests passing | 4 | — |
 | Integration tests passing | 0 | 5 |
-| Unit test coverage | 0% | 80% |
+| Unit test coverage | ~40% | 80% |
 | Known blockers | 0 | 0 |
