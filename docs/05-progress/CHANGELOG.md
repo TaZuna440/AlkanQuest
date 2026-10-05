@@ -89,3 +89,25 @@ Types: feat, fix, docs, chore, refactor, test
 
 ### chore
 - Tagged v0.3.0-phase-03
+
+---
+
+## 2026-10-05 — Phase 04 Complete
+
+### feat
+- Full Create Challenge form with validation
+- Live plan calculator (frequency ↔ date sync)
+- Circular image upload for quest icon
+- Frequency chips filter by days remaining (7D+, 30D+)
+- Auto-reconcile frequency when date changes
+- "SUGGEST" button reverse-computes date from frequency
+- Home displays live challenges + profile name
+- Money formatter (peso ₱, comma separators)
+
+### fix
+- Better error messages (magnitude-first validation)
+- Date picker: past days dimmed to bg color
+- Riverpod 3 async ref safety in first quest screen
+
+### chore
+- Tagged v0.4.0-phase-04

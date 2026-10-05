@@ -1,23 +1,20 @@
 # Current Phase
 
-**Phase:** 04 — Create Challenge
+**Phase:** 05 — Check-in
 **Started:** 2026-10-05
 **Target completion:** —
 
 ## Deliverables
 
-1. Full Create Challenge form
-2. Name validation (Section I rules)
-3. Target amount validation
-4. Starting amount cross-validation
-5. Target date picker
-6. Frequency selector (Daily/Weekly/Monthly/Flexible)
-7. Icon picker (grid)
-8. Color picker (8 swatches)
-9. Home screen integration ("+ CREATE QUEST" button navigates)
-10. Home reads live active challenges + profile name
+1. Check-in form (amount, note, optional proof)
+2. Amount validation
+3. Proof image capture + save
+4. Draft auto-save (crash recovery)
+5. `+ I SAVED IT` button on quest cards
+6. Challenge auto-completes when target reached
+7. Home shows updated progress
 
 ## Notes
 
-> Phase 03 delivered: 5-screen onboarding with profile persistence.
-> Phase 04 delivers: The full Create Challenge form.
+> Phase 04 delivered: Create Challenge form, plan calculator, live validation.
+> Phase 05 delivers: The check-in loop.
