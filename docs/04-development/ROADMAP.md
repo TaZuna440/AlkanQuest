@@ -23,12 +23,8 @@
 
 ## Milestone Tags
 
-After each phase:
-- `v0.1.0-phase-01` through `v0.12.0-phase-12`
-- `v1.0.0-mvp` — after Phase 12 complete + tested
-
-## Dependencies
-
+- v0.1.0-phase-01 through v0.12.0-phase-12
+- v1.0.0-mvp after Phase 12
 
 ## Post-MVP
 

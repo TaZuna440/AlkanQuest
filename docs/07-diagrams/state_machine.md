@@ -2,38 +2,38 @@
 
 ## States
 
-- **Active** — user is working toward the goal
-- **Completed** — target reached
-- **Cancelled** — user ended it
+- Active - user is working toward the goal
+- Completed - target reached
+- Cancelled - user ended it
 
 ## Transitions
 
-┌──────────┐
-│ ACTIVE │
-└────┬─────┘
-│
-┌────────┴────────┐
-▼ ▼
-┌──────────┐ ┌───────────┐
-│COMPLETED │ │ CANCELLED │
-└──────────┘ └───────────┘
-▲
-│ (record deleted,
-│ drops below target)
-└──────── ACTIVE
+         +----------+
+         |  ACTIVE  |
+         +----+-----+
+              |
+     +--------+--------+
+     v                 v
++----------+     +-----------+
+|COMPLETED |     | CANCELLED |
++----------+     +-----------+
+     ^
+     | (record deleted,
+     |  drops below target)
+     +-------- ACTIVE
 
 ## Rules
 
 | From | To | Trigger |
 |------|-----|---------|
-| Active | Completed | Total ≥ target |
+| Active | Completed | Total >= target |
 | Active | Cancelled | User cancels |
 | Completed | Active | Record deleted, total < target |
-| Completed | Cancelled | ❌ Not allowed |
-| Cancelled | * | ❌ Terminal state |
+| Completed | Cancelled | NOT allowed |
+| Cancelled | (any) | Terminal state |
 
 ## Not Allowed
 
-- Reactivating cancelled → create new
-- Pausing → not in MVP
-- Reopening completed → create new
+- Reactivating cancelled - create new
+- Pausing - not in MVP
+- Reopening completed - create new
