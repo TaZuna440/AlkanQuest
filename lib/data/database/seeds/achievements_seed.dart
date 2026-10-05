@@ -1,0 +1,58 @@
+import '../app_database.dart';
+
+final List<AchievementsCompanion> defaultAchievementsSeed = [
+  AchievementsCompanion.insert(
+    id: 'first_ipon',
+    nameEn: 'FIRST IPON',
+    nameFil: 'UNANG IPON',
+    descriptionEn: 'First savings check-in',
+    descriptionFil: 'Unang pag-ipon',
+    icon: 'coin_stack',
+    xpReward: 100,
+  ),
+  AchievementsCompanion.insert(
+    id: 'first_1000',
+    nameEn: 'FIRST 1,000',
+    nameFil: 'UNANG LIBO',
+    descriptionEn: 'Reach 1,000 in total recorded savings',
+    descriptionFil: 'Umabot ng 1,000 sa kabuuang naipon',
+    icon: 'vault',
+    xpReward: 250,
+  ),
+  AchievementsCompanion.insert(
+    id: 'streak_7',
+    nameEn: 'SEVEN CLEARED',
+    nameFil: 'PITONG TAGUMPAY',
+    descriptionEn: 'Complete 7 challenges in a row',
+    descriptionFil: 'Tapusin ang 7 hamon nang sunod-sunod',
+    icon: 'trophy',
+    xpReward: 200,
+  ),
+  AchievementsCompanion.insert(
+    id: 'streak_30',
+    nameEn: 'THIRTY CLEARED',
+    nameFil: 'TATLONG PUNG TAGUMPAY',
+    descriptionEn: 'Complete 30 challenges in a row',
+    descriptionFil: 'Tapusin ang 30 hamon nang sunod-sunod',
+    icon: 'crown',
+    xpReward: 1000,
+  ),
+  AchievementsCompanion.insert(
+    id: 'first_challenge',
+    nameEn: 'FIRST QUEST',
+    nameFil: 'UNANG QUEST',
+    descriptionEn: 'Complete your first challenge',
+    descriptionFil: 'Tapusin ang iyong unang hamon',
+    icon: 'flag',
+    xpReward: 500,
+  ),
+  AchievementsCompanion.insert(
+    id: 'saver_10k',
+    nameEn: 'TEN THOUSAND',
+    nameFil: 'SAMPUNG LIBO',
+    descriptionEn: 'Record 10,000 in total savings',
+    descriptionFil: 'Mag-ipon ng 10,000 sa kabuuan',
+    icon: 'diamond',
+    xpReward: 1500,
+  ),
+];
