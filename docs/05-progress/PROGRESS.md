@@ -4,12 +4,19 @@
 
 ## Overall Status
 
+MVP Progress: █░░░░░░░░░░░░░░░░░░░ 8%
+
+Phases complete: 1 / 12
+Phases in progress: 0
+Current phase: Awaiting Phase 02
+
+
 
 ## Phase Tracker
 
 | # | Phase | Status | Started | Completed |
 |---|-------|--------|---------|-----------|
-| 01 | Foundation | 🔵 Not started | — | — |
+| 01 | Foundation | 🟢 Complete | 2026-10-05 | 2026-10-05 |
 | 02 | Core Models | 🔵 Not started | — | — |
 | 03 | Onboarding | 🔵 Not started | — | — |
 | 04 | Create Challenge | 🔵 Not started | — | — |
@@ -26,23 +33,24 @@
 
 ## Current Focus
 
-Nothing active. Awaiting Phase 01 kickoff.
+Nothing active. Ready to begin Phase 02 — Core Models.
 
 ## Recent Milestones
 
+- **2026-10-05** — Phase 01 complete (v0.1.0-phase-01)
 - **2026-10-05** — Project spec completed
 - **2026-10-05** — Documentation structure created
 
 ## Next Up
 
-→ Begin Phase 01 — Foundation
+→ Begin Phase 02 — Core Models
 → See [CURRENT_PHASE.md](CURRENT_PHASE.md)
 
 ## Metrics
 
 | Metric | Value | Target |
 |--------|-------|--------|
-| Phases complete | 0 | 12 |
+| Phases complete | 1 | 12 |
 | Integration tests passing | 0 | 5 |
 | Unit test coverage | 0% | 80% |
 | Known blockers | 0 | 0 |

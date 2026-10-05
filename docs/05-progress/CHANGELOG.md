@@ -22,3 +22,30 @@ Types: feat, fix, docs, chore, refactor, test
 - Created project folder structure
 - Created pubspec.yaml with full dependency list
 - Created README.md at project root
+
+---
+
+## 2026-10-05 — Phase 01 Complete
+
+### feat
+- Shadow System Window theme (colors, typography)
+- IponApp root widget with ProviderScope
+- HomeScreen with SystemWindowFrame component
+- Empty state UI ("NO ACTIVE QUESTS" + "+ CREATE QUEST")
+
+### chore
+- Downloaded 9 font files (Orbitron, Rajdhani, JetBrains Mono)
+- Configured fonts in pubspec.yaml
+- Migrated from Snap Flutter to Git Flutter (fixed desktop rendering)
+- Installed Linux desktop build tools (clang, cmake, ninja, GTK)
+- Added Linux platform target
+- Tagged v0.1.0-phase-01
+
+### fix
+- Removed `flutter_heif` (nonexistent package)
+- Fixed pubspec fonts section
+- Removed experimental `.fromSeed` syntax from main.dart
+
+### known-issues
+- Android emulator deferred (SDK 36 license quirk)
+- Development target is Linux desktop for now

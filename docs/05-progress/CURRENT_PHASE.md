@@ -1,19 +1,21 @@
 # Current Phase
 
-**Phase:** None — awaiting Phase 01
+**Phase:** 02 — Core Models
 **Started:** —
 **Target completion:** —
 
 ## What's Being Worked On
 
-Nothing active. Ready to begin Phase 01 — Foundation.
+Ready to begin. Phase 02 builds the Drift schema and repositories.
 
 ## Next Actions
 
-1. Confirm Flutter is installed (`flutter doctor`)
-2. Accept Android licenses (`flutter doctor --android-licenses`)
-3. Run `flutter create . --org com.iponsystem --project-name ipon_system`
-4. Begin Phase 01 tasks — see [../04-development/PHASE_01_foundation.md](../04-development/PHASE_01_foundation.md)
+1. Create `lib/data/database/app_database.dart`
+2. Create table definitions in `lib/data/database/tables/`
+3. Create domain models in `lib/domain/models/`
+4. Create repositories in `lib/data/repositories/`
+5. Run `dart run build_runner build` to generate Drift code
+6. Write unit tests for repositories
 
 ## Blockers
 
@@ -21,4 +23,5 @@ None currently.
 
 ## Notes
 
-> Update this file every time work starts, stops, or transitions to a new phase.
+> Phase 01 delivered: Foundation (theme, fonts, routing placeholder, first screen).
+> Phase 02 delivers: Data layer (Drift tables, domain models, repositories).
