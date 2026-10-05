@@ -81,7 +81,13 @@ class $ChallengesTable extends Challenges
       'icon_id', aliasedName, false,
       type: DriftSqlType.string,
       requiredDuringInsert: false,
-      defaultValue: const Constant('piggy_bank'));
+      defaultValue: const Constant('savings'));
+  static const VerificationMeta _iconPathMeta =
+      const VerificationMeta('iconPath');
+  @override
+  late final GeneratedColumn<String> iconPath = GeneratedColumn<String>(
+      'icon_path', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _milestone25NotifiedMeta =
       const VerificationMeta('milestone25Notified');
   @override
@@ -157,6 +163,7 @@ class $ChallengesTable extends Challenges
         status,
         colorHex,
         iconId,
+        iconPath,
         milestone25Notified,
         milestone50Notified,
         milestone75Notified,
@@ -238,6 +245,10 @@ class $ChallengesTable extends Challenges
       context.handle(_iconIdMeta,
           iconId.isAcceptableOrUnknown(data['icon_id']!, _iconIdMeta));
     }
+    if (data.containsKey('icon_path')) {
+      context.handle(_iconPathMeta,
+          iconPath.isAcceptableOrUnknown(data['icon_path']!, _iconPathMeta));
+    }
     if (data.containsKey('milestone25_notified')) {
       context.handle(
           _milestone25NotifiedMeta,
@@ -311,6 +322,8 @@ class $ChallengesTable extends Challenges
           .read(DriftSqlType.string, data['${effectivePrefix}color_hex'])!,
       iconId: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}icon_id'])!,
+      iconPath: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}icon_path']),
       milestone25Notified: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}milestone25_notified'])!,
       milestone50Notified: attachedDatabase.typeMapping.read(
@@ -347,6 +360,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
   final String status;
   final String colorHex;
   final String iconId;
+  final String? iconPath;
   final bool milestone25Notified;
   final bool milestone50Notified;
   final bool milestone75Notified;
@@ -366,6 +380,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       required this.status,
       required this.colorHex,
       required this.iconId,
+      this.iconPath,
       required this.milestone25Notified,
       required this.milestone50Notified,
       required this.milestone75Notified,
@@ -389,6 +404,9 @@ class Challenge extends DataClass implements Insertable<Challenge> {
     map['status'] = Variable<String>(status);
     map['color_hex'] = Variable<String>(colorHex);
     map['icon_id'] = Variable<String>(iconId);
+    if (!nullToAbsent || iconPath != null) {
+      map['icon_path'] = Variable<String>(iconPath);
+    }
     map['milestone25_notified'] = Variable<bool>(milestone25Notified);
     map['milestone50_notified'] = Variable<bool>(milestone50Notified);
     map['milestone75_notified'] = Variable<bool>(milestone75Notified);
@@ -416,6 +434,9 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       status: Value(status),
       colorHex: Value(colorHex),
       iconId: Value(iconId),
+      iconPath: iconPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(iconPath),
       milestone25Notified: Value(milestone25Notified),
       milestone50Notified: Value(milestone50Notified),
       milestone75Notified: Value(milestone75Notified),
@@ -443,6 +464,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       status: serializer.fromJson<String>(json['status']),
       colorHex: serializer.fromJson<String>(json['colorHex']),
       iconId: serializer.fromJson<String>(json['iconId']),
+      iconPath: serializer.fromJson<String?>(json['iconPath']),
       milestone25Notified:
           serializer.fromJson<bool>(json['milestone25Notified']),
       milestone50Notified:
@@ -471,6 +493,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       'status': serializer.toJson<String>(status),
       'colorHex': serializer.toJson<String>(colorHex),
       'iconId': serializer.toJson<String>(iconId),
+      'iconPath': serializer.toJson<String?>(iconPath),
       'milestone25Notified': serializer.toJson<bool>(milestone25Notified),
       'milestone50Notified': serializer.toJson<bool>(milestone50Notified),
       'milestone75Notified': serializer.toJson<bool>(milestone75Notified),
@@ -493,6 +516,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
           String? status,
           String? colorHex,
           String? iconId,
+          Value<String?> iconPath = const Value.absent(),
           bool? milestone25Notified,
           bool? milestone50Notified,
           bool? milestone75Notified,
@@ -512,6 +536,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
         status: status ?? this.status,
         colorHex: colorHex ?? this.colorHex,
         iconId: iconId ?? this.iconId,
+        iconPath: iconPath.present ? iconPath.value : this.iconPath,
         milestone25Notified: milestone25Notified ?? this.milestone25Notified,
         milestone50Notified: milestone50Notified ?? this.milestone50Notified,
         milestone75Notified: milestone75Notified ?? this.milestone75Notified,
@@ -540,6 +565,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       status: data.status.present ? data.status.value : this.status,
       colorHex: data.colorHex.present ? data.colorHex.value : this.colorHex,
       iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      iconPath: data.iconPath.present ? data.iconPath.value : this.iconPath,
       milestone25Notified: data.milestone25Notified.present
           ? data.milestone25Notified.value
           : this.milestone25Notified,
@@ -575,6 +601,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
           ..write('status: $status, ')
           ..write('colorHex: $colorHex, ')
           ..write('iconId: $iconId, ')
+          ..write('iconPath: $iconPath, ')
           ..write('milestone25Notified: $milestone25Notified, ')
           ..write('milestone50Notified: $milestone50Notified, ')
           ..write('milestone75Notified: $milestone75Notified, ')
@@ -599,6 +626,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
       status,
       colorHex,
       iconId,
+      iconPath,
       milestone25Notified,
       milestone50Notified,
       milestone75Notified,
@@ -621,6 +649,7 @@ class Challenge extends DataClass implements Insertable<Challenge> {
           other.status == this.status &&
           other.colorHex == this.colorHex &&
           other.iconId == this.iconId &&
+          other.iconPath == this.iconPath &&
           other.milestone25Notified == this.milestone25Notified &&
           other.milestone50Notified == this.milestone50Notified &&
           other.milestone75Notified == this.milestone75Notified &&
@@ -642,6 +671,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
   final Value<String> status;
   final Value<String> colorHex;
   final Value<String> iconId;
+  final Value<String?> iconPath;
   final Value<bool> milestone25Notified;
   final Value<bool> milestone50Notified;
   final Value<bool> milestone75Notified;
@@ -662,6 +692,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
     this.status = const Value.absent(),
     this.colorHex = const Value.absent(),
     this.iconId = const Value.absent(),
+    this.iconPath = const Value.absent(),
     this.milestone25Notified = const Value.absent(),
     this.milestone50Notified = const Value.absent(),
     this.milestone75Notified = const Value.absent(),
@@ -683,6 +714,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
     this.status = const Value.absent(),
     this.colorHex = const Value.absent(),
     this.iconId = const Value.absent(),
+    this.iconPath = const Value.absent(),
     this.milestone25Notified = const Value.absent(),
     this.milestone50Notified = const Value.absent(),
     this.milestone75Notified = const Value.absent(),
@@ -710,6 +742,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
     Expression<String>? status,
     Expression<String>? colorHex,
     Expression<String>? iconId,
+    Expression<String>? iconPath,
     Expression<bool>? milestone25Notified,
     Expression<bool>? milestone50Notified,
     Expression<bool>? milestone75Notified,
@@ -732,6 +765,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
       if (status != null) 'status': status,
       if (colorHex != null) 'color_hex': colorHex,
       if (iconId != null) 'icon_id': iconId,
+      if (iconPath != null) 'icon_path': iconPath,
       if (milestone25Notified != null)
         'milestone25_notified': milestone25Notified,
       if (milestone50Notified != null)
@@ -759,6 +793,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
       Value<String>? status,
       Value<String>? colorHex,
       Value<String>? iconId,
+      Value<String?>? iconPath,
       Value<bool>? milestone25Notified,
       Value<bool>? milestone50Notified,
       Value<bool>? milestone75Notified,
@@ -779,6 +814,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
       status: status ?? this.status,
       colorHex: colorHex ?? this.colorHex,
       iconId: iconId ?? this.iconId,
+      iconPath: iconPath ?? this.iconPath,
       milestone25Notified: milestone25Notified ?? this.milestone25Notified,
       milestone50Notified: milestone50Notified ?? this.milestone50Notified,
       milestone75Notified: milestone75Notified ?? this.milestone75Notified,
@@ -827,6 +863,9 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
     if (iconId.present) {
       map['icon_id'] = Variable<String>(iconId.value);
     }
+    if (iconPath.present) {
+      map['icon_path'] = Variable<String>(iconPath.value);
+    }
     if (milestone25Notified.present) {
       map['milestone25_notified'] = Variable<bool>(milestone25Notified.value);
     }
@@ -869,6 +908,7 @@ class ChallengesCompanion extends UpdateCompanion<Challenge> {
           ..write('status: $status, ')
           ..write('colorHex: $colorHex, ')
           ..write('iconId: $iconId, ')
+          ..write('iconPath: $iconPath, ')
           ..write('milestone25Notified: $milestone25Notified, ')
           ..write('milestone50Notified: $milestone50Notified, ')
           ..write('milestone75Notified: $milestone75Notified, ')
@@ -2880,6 +2920,7 @@ typedef $$ChallengesTableCreateCompanionBuilder = ChallengesCompanion Function({
   Value<String> status,
   Value<String> colorHex,
   Value<String> iconId,
+  Value<String?> iconPath,
   Value<bool> milestone25Notified,
   Value<bool> milestone50Notified,
   Value<bool> milestone75Notified,
@@ -2901,6 +2942,7 @@ typedef $$ChallengesTableUpdateCompanionBuilder = ChallengesCompanion Function({
   Value<String> status,
   Value<String> colorHex,
   Value<String> iconId,
+  Value<String?> iconPath,
   Value<bool> milestone25Notified,
   Value<bool> milestone50Notified,
   Value<bool> milestone75Notified,
@@ -2974,6 +3016,9 @@ class $$ChallengesTableFilterComposer
 
   ColumnFilters<String> get iconId => $composableBuilder(
       column: $table.iconId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get iconPath => $composableBuilder(
+      column: $table.iconPath, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<bool> get milestone25Notified => $composableBuilder(
       column: $table.milestone25Notified,
@@ -3067,6 +3112,9 @@ class $$ChallengesTableOrderingComposer
   ColumnOrderings<String> get iconId => $composableBuilder(
       column: $table.iconId, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get iconPath => $composableBuilder(
+      column: $table.iconPath, builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<bool> get milestone25Notified => $composableBuilder(
       column: $table.milestone25Notified,
       builder: (column) => ColumnOrderings(column));
@@ -3135,6 +3183,9 @@ class $$ChallengesTableAnnotationComposer
 
   GeneratedColumn<String> get iconId =>
       $composableBuilder(column: $table.iconId, builder: (column) => column);
+
+  GeneratedColumn<String> get iconPath =>
+      $composableBuilder(column: $table.iconPath, builder: (column) => column);
 
   GeneratedColumn<bool> get milestone25Notified => $composableBuilder(
       column: $table.milestone25Notified, builder: (column) => column);
@@ -3213,6 +3264,7 @@ class $$ChallengesTableTableManager extends RootTableManager<
             Value<String> status = const Value.absent(),
             Value<String> colorHex = const Value.absent(),
             Value<String> iconId = const Value.absent(),
+            Value<String?> iconPath = const Value.absent(),
             Value<bool> milestone25Notified = const Value.absent(),
             Value<bool> milestone50Notified = const Value.absent(),
             Value<bool> milestone75Notified = const Value.absent(),
@@ -3234,6 +3286,7 @@ class $$ChallengesTableTableManager extends RootTableManager<
             status: status,
             colorHex: colorHex,
             iconId: iconId,
+            iconPath: iconPath,
             milestone25Notified: milestone25Notified,
             milestone50Notified: milestone50Notified,
             milestone75Notified: milestone75Notified,
@@ -3255,6 +3308,7 @@ class $$ChallengesTableTableManager extends RootTableManager<
             Value<String> status = const Value.absent(),
             Value<String> colorHex = const Value.absent(),
             Value<String> iconId = const Value.absent(),
+            Value<String?> iconPath = const Value.absent(),
             Value<bool> milestone25Notified = const Value.absent(),
             Value<bool> milestone50Notified = const Value.absent(),
             Value<bool> milestone75Notified = const Value.absent(),
@@ -3276,6 +3330,7 @@ class $$ChallengesTableTableManager extends RootTableManager<
             status: status,
             colorHex: colorHex,
             iconId: iconId,
+            iconPath: iconPath,
             milestone25Notified: milestone25Notified,
             milestone50Notified: milestone50Notified,
             milestone75Notified: milestone75Notified,

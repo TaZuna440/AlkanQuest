@@ -10,7 +10,8 @@ class ChallengeRepository {
   ChallengeRepository(this._db);
 
   Stream<List<Challenge>> watchAll() =>
-      (_db.select(_db.challenges)..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+      (_db.select(_db.challenges)
+            ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
           .watch();
 
   Stream<List<Challenge>> watchByStatus(String status) =>
@@ -31,7 +32,8 @@ class ChallengeRepository {
     required String frequency,
     int startingAmountCents = 0,
     String colorHex = '#B026FF',
-    String iconId = 'piggy_bank',
+    String iconId = 'savings',
+    String? iconPath,
   }) async {
     final id = _uuid.v4();
     final now = DateTime.now().toUtc();
@@ -47,6 +49,7 @@ class ChallengeRepository {
             frequency: frequency,
             colorHex: Value(colorHex),
             iconId: Value(iconId),
+            iconPath: Value(iconPath),
             createdAt: now,
           ),
         );
