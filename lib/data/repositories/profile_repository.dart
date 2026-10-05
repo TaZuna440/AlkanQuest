@@ -31,4 +31,13 @@ class ProfileRepository {
   Future<void> updateDisplayName(String name) =>
       (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
           .write(UserProfilesCompanion(displayName: Value(name)));
+
+  Future<void> markOnboardingComplete() =>
+      (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .write(const UserProfilesCompanion(onboardingComplete: Value(true)));
+
+  Future<bool> isOnboardingComplete() async {
+    final profile = await get();
+    return profile?.onboardingComplete ?? false;
+  }
 }

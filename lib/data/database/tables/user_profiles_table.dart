@@ -19,6 +19,8 @@ class UserProfiles extends Table {
   IntColumn get notificationDeclineCount =>
       integer().withDefault(const Constant(0))();
   DateTimeColumn get lastNotificationPrompt => dateTime().nullable()();
+  BoolColumn get onboardingComplete =>
+      boolean().withDefault(const Constant(false))();
   DateTimeColumn get createdAt => dateTime()();
 
   @override

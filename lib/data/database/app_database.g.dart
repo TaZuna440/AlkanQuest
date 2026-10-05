@@ -1475,6 +1475,16 @@ class $UserProfilesTable extends UserProfiles
   late final GeneratedColumn<DateTime> lastNotificationPrompt =
       GeneratedColumn<DateTime>('last_notification_prompt', aliasedName, true,
           type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  static const VerificationMeta _onboardingCompleteMeta =
+      const VerificationMeta('onboardingComplete');
+  @override
+  late final GeneratedColumn<bool> onboardingComplete = GeneratedColumn<bool>(
+      'onboarding_complete', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("onboarding_complete" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1497,6 +1507,7 @@ class $UserProfilesTable extends UserProfiles
         dailyReminderTime,
         notificationDeclineCount,
         lastNotificationPrompt,
+        onboardingComplete,
         createdAt
       ];
   @override
@@ -1587,6 +1598,12 @@ class $UserProfilesTable extends UserProfiles
           lastNotificationPrompt.isAcceptableOrUnknown(
               data['last_notification_prompt']!, _lastNotificationPromptMeta));
     }
+    if (data.containsKey('onboarding_complete')) {
+      context.handle(
+          _onboardingCompleteMeta,
+          onboardingComplete.isAcceptableOrUnknown(
+              data['onboarding_complete']!, _onboardingCompleteMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -1633,6 +1650,8 @@ class $UserProfilesTable extends UserProfiles
       lastNotificationPrompt: attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}last_notification_prompt']),
+      onboardingComplete: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}onboarding_complete'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -1659,6 +1678,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
   final String dailyReminderTime;
   final int notificationDeclineCount;
   final DateTime? lastNotificationPrompt;
+  final bool onboardingComplete;
   final DateTime createdAt;
   const UserProfile(
       {required this.id,
@@ -1675,6 +1695,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       required this.dailyReminderTime,
       required this.notificationDeclineCount,
       this.lastNotificationPrompt,
+      required this.onboardingComplete,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1698,6 +1719,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       map['last_notification_prompt'] =
           Variable<DateTime>(lastNotificationPrompt);
     }
+    map['onboarding_complete'] = Variable<bool>(onboardingComplete);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -1722,6 +1744,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       lastNotificationPrompt: lastNotificationPrompt == null && nullToAbsent
           ? const Value.absent()
           : Value(lastNotificationPrompt),
+      onboardingComplete: Value(onboardingComplete),
       createdAt: Value(createdAt),
     );
   }
@@ -1748,6 +1771,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           serializer.fromJson<int>(json['notificationDeclineCount']),
       lastNotificationPrompt:
           serializer.fromJson<DateTime?>(json['lastNotificationPrompt']),
+      onboardingComplete: serializer.fromJson<bool>(json['onboardingComplete']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -1772,6 +1796,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           serializer.toJson<int>(notificationDeclineCount),
       'lastNotificationPrompt':
           serializer.toJson<DateTime?>(lastNotificationPrompt),
+      'onboardingComplete': serializer.toJson<bool>(onboardingComplete),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -1791,6 +1816,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           String? dailyReminderTime,
           int? notificationDeclineCount,
           Value<DateTime?> lastNotificationPrompt = const Value.absent(),
+          bool? onboardingComplete,
           DateTime? createdAt}) =>
       UserProfile(
         id: id ?? this.id,
@@ -1811,6 +1837,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
         lastNotificationPrompt: lastNotificationPrompt.present
             ? lastNotificationPrompt.value
             : this.lastNotificationPrompt,
+        onboardingComplete: onboardingComplete ?? this.onboardingComplete,
         createdAt: createdAt ?? this.createdAt,
       );
   UserProfile copyWithCompanion(UserProfilesCompanion data) {
@@ -1845,6 +1872,9 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       lastNotificationPrompt: data.lastNotificationPrompt.present
           ? data.lastNotificationPrompt.value
           : this.lastNotificationPrompt,
+      onboardingComplete: data.onboardingComplete.present
+          ? data.onboardingComplete.value
+          : this.onboardingComplete,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -1866,6 +1896,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ..write('dailyReminderTime: $dailyReminderTime, ')
           ..write('notificationDeclineCount: $notificationDeclineCount, ')
           ..write('lastNotificationPrompt: $lastNotificationPrompt, ')
+          ..write('onboardingComplete: $onboardingComplete, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -1887,6 +1918,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       dailyReminderTime,
       notificationDeclineCount,
       lastNotificationPrompt,
+      onboardingComplete,
       createdAt);
   @override
   bool operator ==(Object other) =>
@@ -1906,6 +1938,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           other.dailyReminderTime == this.dailyReminderTime &&
           other.notificationDeclineCount == this.notificationDeclineCount &&
           other.lastNotificationPrompt == this.lastNotificationPrompt &&
+          other.onboardingComplete == this.onboardingComplete &&
           other.createdAt == this.createdAt);
 }
 
@@ -1924,6 +1957,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
   final Value<String> dailyReminderTime;
   final Value<int> notificationDeclineCount;
   final Value<DateTime?> lastNotificationPrompt;
+  final Value<bool> onboardingComplete;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const UserProfilesCompanion({
@@ -1941,6 +1975,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.dailyReminderTime = const Value.absent(),
     this.notificationDeclineCount = const Value.absent(),
     this.lastNotificationPrompt = const Value.absent(),
+    this.onboardingComplete = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -1959,6 +1994,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.dailyReminderTime = const Value.absent(),
     this.notificationDeclineCount = const Value.absent(),
     this.lastNotificationPrompt = const Value.absent(),
+    this.onboardingComplete = const Value.absent(),
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -1979,6 +2015,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Expression<String>? dailyReminderTime,
     Expression<int>? notificationDeclineCount,
     Expression<DateTime>? lastNotificationPrompt,
+    Expression<bool>? onboardingComplete,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -2001,6 +2038,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
         'notification_decline_count': notificationDeclineCount,
       if (lastNotificationPrompt != null)
         'last_notification_prompt': lastNotificationPrompt,
+      if (onboardingComplete != null) 'onboarding_complete': onboardingComplete,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2021,6 +2059,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       Value<String>? dailyReminderTime,
       Value<int>? notificationDeclineCount,
       Value<DateTime?>? lastNotificationPrompt,
+      Value<bool>? onboardingComplete,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return UserProfilesCompanion(
@@ -2041,6 +2080,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
           notificationDeclineCount ?? this.notificationDeclineCount,
       lastNotificationPrompt:
           lastNotificationPrompt ?? this.lastNotificationPrompt,
+      onboardingComplete: onboardingComplete ?? this.onboardingComplete,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -2094,6 +2134,9 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       map['last_notification_prompt'] =
           Variable<DateTime>(lastNotificationPrompt.value);
     }
+    if (onboardingComplete.present) {
+      map['onboarding_complete'] = Variable<bool>(onboardingComplete.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -2120,6 +2163,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
           ..write('dailyReminderTime: $dailyReminderTime, ')
           ..write('notificationDeclineCount: $notificationDeclineCount, ')
           ..write('lastNotificationPrompt: $lastNotificationPrompt, ')
+          ..write('onboardingComplete: $onboardingComplete, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3642,6 +3686,7 @@ typedef $$UserProfilesTableCreateCompanionBuilder = UserProfilesCompanion
   Value<String> dailyReminderTime,
   Value<int> notificationDeclineCount,
   Value<DateTime?> lastNotificationPrompt,
+  Value<bool> onboardingComplete,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -3661,6 +3706,7 @@ typedef $$UserProfilesTableUpdateCompanionBuilder = UserProfilesCompanion
   Value<String> dailyReminderTime,
   Value<int> notificationDeclineCount,
   Value<DateTime?> lastNotificationPrompt,
+  Value<bool> onboardingComplete,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -3719,6 +3765,10 @@ class $$UserProfilesTableFilterComposer
 
   ColumnFilters<DateTime> get lastNotificationPrompt => $composableBuilder(
       column: $table.lastNotificationPrompt,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get onboardingComplete => $composableBuilder(
+      column: $table.onboardingComplete,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
@@ -3783,6 +3833,10 @@ class $$UserProfilesTableOrderingComposer
       column: $table.lastNotificationPrompt,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get onboardingComplete => $composableBuilder(
+      column: $table.onboardingComplete,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
@@ -3838,6 +3892,9 @@ class $$UserProfilesTableAnnotationComposer
   GeneratedColumn<DateTime> get lastNotificationPrompt => $composableBuilder(
       column: $table.lastNotificationPrompt, builder: (column) => column);
 
+  GeneratedColumn<bool> get onboardingComplete => $composableBuilder(
+      column: $table.onboardingComplete, builder: (column) => column);
+
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
@@ -3882,6 +3939,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             Value<String> dailyReminderTime = const Value.absent(),
             Value<int> notificationDeclineCount = const Value.absent(),
             Value<DateTime?> lastNotificationPrompt = const Value.absent(),
+            Value<bool> onboardingComplete = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -3900,6 +3958,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             dailyReminderTime: dailyReminderTime,
             notificationDeclineCount: notificationDeclineCount,
             lastNotificationPrompt: lastNotificationPrompt,
+            onboardingComplete: onboardingComplete,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -3918,6 +3977,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             Value<String> dailyReminderTime = const Value.absent(),
             Value<int> notificationDeclineCount = const Value.absent(),
             Value<DateTime?> lastNotificationPrompt = const Value.absent(),
+            Value<bool> onboardingComplete = const Value.absent(),
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -3936,6 +3996,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             dailyReminderTime: dailyReminderTime,
             notificationDeclineCount: notificationDeclineCount,
             lastNotificationPrompt: lastNotificationPrompt,
+            onboardingComplete: onboardingComplete,
             createdAt: createdAt,
             rowid: rowid,
           ),
