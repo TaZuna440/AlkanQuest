@@ -70,3 +70,22 @@ Types: feat, fix, docs, chore, refactor, test
 ### fix
 - Removed unused `package:drift/drift.dart` import in seed file
 - Pinned drift/drift_dev/sqlite3_flutter_libs to compatible versions
+
+---
+
+## 2026-10-05 — Phase 03 Complete
+
+### feat
+- 5-screen onboarding: Splash, Awakening, Registration, First Quest, Briefing
+- Name validation with reserved-name blocking
+- 3 starter quest templates (P50/day, 52-week, Custom)
+- Profile persists after onboarding (onboardingComplete flag)
+- AppRoot bootstraps and gates Home on profile state
+
+### fix
+- Riverpod 3 async ref usage in FirstQuestScreen
+- SystemWindowFrame overflow (mainAxisSize.min)
+- Migration v1→v2 adds onboardingComplete column
+
+### chore
+- Tagged v0.3.0-phase-03
