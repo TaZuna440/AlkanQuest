@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import '../utils/image_picker_helper.dart';
+
+import 'image_ref_view.dart';
 
 class ChallengeIcon extends StatelessWidget {
   final String? iconPath;
@@ -16,36 +16,31 @@ class ChallengeIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (iconPath == null) return _placeholder();
+    final hasImage = iconPath != null && iconPath!.isNotEmpty;
+    if (!hasImage) return _placeholder();
 
-    return FutureBuilder<String>(
-      future: ImagePickerHelper.resolveAbsolute(iconPath!),
-      builder: (context, snap) {
-        if (!snap.hasData) return _placeholder();
-        return Container(
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: color, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.4),
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      child: ClipOval(
+        child: ImageRefView(
+          reference: iconPath,
           width: size,
           height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: color, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.4),
-                blurRadius: 8,
-              ),
-            ],
-          ),
-          child: ClipOval(
-            child: Image.file(
-              File(snap.data!),
-              width: size,
-              height: size,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => _placeholder(),
-            ),
-          ),
-        );
-      },
+          fit: BoxFit.cover,
+          placeholderBuilder: _placeholder,
+        ),
+      ),
     );
   }
 

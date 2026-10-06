@@ -6,8 +6,10 @@ import '../../../core/theme/system_window_frame.dart';
 import '../../../core/theme/typography.dart';
 import '../../../core/utils/money_formatter.dart';
 import '../../../core/widgets/challenge_icon.dart';
+import '../../../data/database/app_database.dart';
 import '../../challenges/presentation/create_challenge_screen.dart';
 import '../../challenges/providers/challenge_providers.dart';
+import '../../checkin/presentation/checkin_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -132,20 +134,19 @@ class HomeScreen extends ConsumerWidget {
 }
 
 class _ChallengeCard extends StatelessWidget {
-  final dynamic challenge;
+  final Challenge challenge;
   const _ChallengeCard({required this.challenge});
 
   @override
   Widget build(BuildContext context) {
-    final targetCents = challenge.targetAmountCents as int;
-    final currentCents = challenge.currentAmountCents as int;
+    final targetCents = challenge.targetAmountCents;
+    final currentCents = challenge.currentAmountCents;
     final progress = targetCents == 0
         ? 0.0
         : (currentCents / targetCents).clamp(0.0, 1.0);
     final percent = (progress * 100).round();
     final remaining = (targetCents - currentCents).clamp(0, targetCents);
-    final color = _parseHex(challenge.colorHex as String);
-    final iconPath = challenge.iconPath as String?;
+    final color = _parseHex(challenge.colorHex);
 
     return Container(
       padding: const EdgeInsets.all(14),
@@ -157,7 +158,8 @@ class _ChallengeCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              ChallengeIcon(iconPath: iconPath, color: color, size: 36),
+              ChallengeIcon(
+                  iconPath: challenge.iconPath, color: color, size: 36),
               const SizedBox(width: 12),
               Expanded(
                 child: Text('\u25C6 ${challenge.name}',
@@ -182,7 +184,43 @@ class _ChallengeCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text('${MoneyFormatter.format(remaining)} REMAINING',
               style: IponTypography.label),
+          const SizedBox(height: 14),
+          _savedItButton(context, color),
         ],
+      ),
+    );
+  }
+
+  Widget _savedItButton(BuildContext context, Color color) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => CheckinScreen(challenge: challenge),
+            ),
+          );
+          // Home refreshes automatically via activeChallengesProvider stream.
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          decoration: BoxDecoration(
+            border: Border.all(color: color),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.4),
+                blurRadius: 12,
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              '+ I SAVED IT',
+              style: IponTypography.header.copyWith(color: color),
+            ),
+          ),
+        ),
       ),
     );
   }

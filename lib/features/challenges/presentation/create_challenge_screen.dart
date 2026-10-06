@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +11,7 @@ import '../../../core/utils/image_picker_helper.dart';
 import '../../../core/utils/money_formatter.dart';
 import '../../../core/utils/savings_calculator.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/widgets/image_ref_view.dart';
 import '../../../core/widgets/savings_plan_card.dart';
 import '../../../core/widgets/system_button.dart';
 
@@ -472,23 +472,16 @@ class _CreateChallengeScreenState
                       size: 48,
                     )
                   : ClipOval(
-                      child: FutureBuilder<String>(
-                        future:
-                            ImagePickerHelper.resolveAbsolute(_iconPath!),
-                        builder: (context, snap) {
-                          if (!snap.hasData) return const SizedBox();
-                          return Image.file(
-                            File(snap.data!),
-                            fit: BoxFit.cover,
-                            width: 120,
-                            height: 120,
-                            errorBuilder: (_, __, ___) => Icon(
-                              Icons.broken_image_outlined,
-                              color: color,
-                              size: 48,
-                            ),
-                          );
-                        },
+                      child: ImageRefView(
+                        reference: _iconPath,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                        placeholderBuilder: () => Icon(
+                          Icons.broken_image_outlined,
+                          color: color,
+                          size: 48,
+                        ),
                       ),
                     ),
             ),

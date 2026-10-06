@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'package:drift/drift.dart';
-import 'package:drift/native.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
+
+import 'connection/connection.dart'
+    if (dart.library.io) 'connection/connection_native.dart'
+    if (dart.library.js_interop) 'connection/connection_web.dart';
 
 import 'tables/challenges_table.dart';
 import 'tables/savings_records_table.dart';
@@ -20,7 +20,7 @@ part 'app_database.g.dart';
   NotificationLogs,
 ])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+  AppDatabase() : super(openConnection());
 
   AppDatabase.forTesting(super.e);
 
@@ -44,12 +44,4 @@ class AppDatabase extends _$AppDatabase {
           await customStatement('PRAGMA foreign_keys = ON');
         },
       );
-}
-
-LazyDatabase _openConnection() {
-  return LazyDatabase(() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dir.path, 'ipon_system.sqlite'));
-    return NativeDatabase.createInBackground(file);
-  });
 }
