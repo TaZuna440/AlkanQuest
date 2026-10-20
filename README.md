@@ -2,7 +2,7 @@
 
 **Turn saving money into quests. Level up your ipon.**
 
-A gamified personal savings app for Filipino users — inspired by Solo Leveling's System Window.
+A gamified personal savings app for Filipino users — inspired by Solo Leveling's System.
 
 [![Status](https://img.shields.io/badge/status-specification%20complete-b026ff)](#)
 [![Platform](https://img.shields.io/badge/platform-Flutter%20%7C%20iOS%20%7C%20Android-b026ff)](https://flutter.dev/)
