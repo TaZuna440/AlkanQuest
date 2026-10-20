@@ -1,4 +1,4 @@
-# ◆ IPON SYSTEM
+# ◆ AlkanQuest
 
 **Turn saving money into quests. Level up your ipon.**
 
