@@ -1,4 +1,4 @@
-package com.iponsystem.ipon_system
+package com.iponsystem.app
 
 import io.flutter.embedding.android.FlutterActivity
 

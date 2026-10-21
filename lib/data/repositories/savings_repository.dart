@@ -15,6 +15,15 @@ class SavingsRepository {
             ..orderBy([(t) => OrderingTerm.desc(t.date)]))
           .watch();
 
+  /// Live stream of every savings record, newest first.
+  Stream<List<SavingsRecord>> watchAll() =>
+      (_db.select(_db.savingsRecords)
+            ..orderBy([(t) => OrderingTerm.desc(t.date)]))
+          .watch();
+
+  /// Every savings record (for totals and achievement evaluation).
+  Future<List<SavingsRecord>> getAll() => _db.select(_db.savingsRecords).get();
+
   Future<List<SavingsRecord>> getAllByChallenge(String challengeId) =>
       (_db.select(_db.savingsRecords)
             ..where((t) => t.challengeId.equals(challengeId)))

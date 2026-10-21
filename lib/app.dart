@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/providers/notification_providers.dart';
 import 'core/providers/repository_providers.dart';
+import 'core/services/notification_service.dart';
+import 'l10n/system_voice.dart';
 import 'core/theme/app_theme.dart';
-import 'features/home/presentation/home_screen.dart';
+import 'features/home/presentation/main_shell.dart';
 import 'features/onboarding/presentation/awakening_screen.dart';
 import 'features/onboarding/presentation/briefing_screen.dart';
 import 'features/onboarding/presentation/first_quest_screen.dart';
@@ -44,6 +47,19 @@ class _AppRootState extends ConsumerState<AppRoot> {
   Future<void> _bootstrap() async {
     final profileRepo = ref.read(profileRepositoryProvider);
     final profile = await profileRepo.getOrCreate();
+    // Achievements must exist before any screen lists them.
+    await ref.read(achievementRepositoryProvider).seedDefaultsIfEmpty();
+    // Phase 10: re-arm the daily reminder if the player enabled it.
+    if (profile.notificationsEnabled) {
+      final notifs = ref.read(notificationServiceProvider);
+      await notifs.scheduleDailyReminder(
+        NotificationService.parseReminderTime(profile.dailyReminderTime),
+        body: SystemVoice.reminderBody(
+          dramatic: profile.systemVoiceEnabled,
+          locale: profile.locale,
+        ),
+      );
+    }
     await Future<void>.delayed(const Duration(milliseconds: 1200));
     if (!mounted) return;
     setState(() {
@@ -69,7 +85,7 @@ class _AppRootState extends ConsumerState<AppRoot> {
       case OnboardingStep.briefing:
         return const BriefingScreen();
       case OnboardingStep.complete:
-        return const HomeScreen();
+        return const MainShell();
     }
   }
 }

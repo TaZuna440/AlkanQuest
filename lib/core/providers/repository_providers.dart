@@ -5,6 +5,7 @@ import '../../data/repositories/challenge_repository.dart';
 import '../../data/repositories/savings_repository.dart';
 import '../../data/repositories/profile_repository.dart';
 import '../../data/repositories/achievement_repository.dart';
+import '../../data/repositories/notification_repository.dart';
 
 final appDatabaseProvider = Provider<AppDatabase>((ref) {
   final db = AppDatabase();
@@ -26,4 +27,8 @@ final profileRepositoryProvider = Provider<ProfileRepository>(
 
 final achievementRepositoryProvider = Provider<AchievementRepository>(
   (ref) => AchievementRepository(ref.watch(appDatabaseProvider)),
+);
+
+final notificationRepositoryProvider = Provider<NotificationRepository>(
+  (ref) => NotificationRepository(ref.watch(appDatabaseProvider)),
 );

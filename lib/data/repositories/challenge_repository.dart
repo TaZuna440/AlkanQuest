@@ -24,6 +24,11 @@ class ChallengeRepository {
       (_db.select(_db.challenges)..where((t) => t.id.equals(id)))
           .getSingleOrNull();
 
+  /// Live stream of one challenge (emits on every update).
+  Stream<Challenge?> watchById(String id) =>
+      (_db.select(_db.challenges)..where((t) => t.id.equals(id)))
+          .watchSingleOrNull();
+
   Future<String> create({
     required String name,
     String? description,

@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Phase 10: daily check-in reminders + quest milestone alerts. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="ipon_system"
+        android:label="Ipon System"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

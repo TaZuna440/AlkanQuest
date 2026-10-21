@@ -22,8 +22,17 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      if (_error != null) setState(() => _error = null);
+    // Rebuild on every keystroke so the CONTINUE button enables as soon as
+    // the typed name is valid. (Previously the listener only cleared errors,
+    // so `canSubmit` was stuck at its first-build value and the button
+    // stayed disabled forever.)
+    _controller.addListener(_onTextChanged);
+  }
+
+  void _onTextChanged() {
+    if (!mounted) return;
+    setState(() {
+      _error = null;
     });
   }
 
@@ -74,6 +83,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       controller: _controller,
                       style: IponTypography.value,
                       maxLength: 24,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) {
+                        if (IponValidators.validateDisplayName(
+                                _controller.text) ==
+                            null) {
+                          _onSubmit();
+                        }
+                      },
                       cursorColor: IponColors.frameOuter,
                       textCapitalization: TextCapitalization.words,
                       decoration: InputDecoration(

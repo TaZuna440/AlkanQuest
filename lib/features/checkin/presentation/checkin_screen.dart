@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/providers/notification_providers.dart';
+import '../../../core/providers/progression_providers.dart';
 import '../../../core/providers/repository_providers.dart';
 import '../../../core/services/draft_service.dart';
 import '../../../core/theme/color_palette.dart';
@@ -14,7 +16,14 @@ import '../../../core/utils/money_formatter.dart';
 import '../../../core/utils/savings_calculator.dart';
 import '../../../core/widgets/image_ref_view.dart';
 import '../../../core/widgets/system_button.dart';
+import '../../../core/widgets/system_notice_dialog.dart';
 import '../../../data/database/app_database.dart';
+import '../../../domain/services/progression_service.dart';
+import '../../../domain/services/xp_service.dart';
+import '../../../l10n/app_strings.dart';
+import '../../../l10n/l10n_providers.dart';
+import '../../../l10n/system_voice.dart';
+import '../../achievements/presentation/achievement_celebration_dialog.dart';
 
 class CheckinScreen extends ConsumerStatefulWidget {
   final Challenge challenge;
@@ -120,9 +129,9 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
       frequency: c.frequency,
     );
     if (plan == null || plan.requiredPerPeriodCents <= 0) return [];
-    // Round up to nearest ₱10
+    // A5 rounding: up to nearest ₱10 / ₱50 / ₱100 by frequency.
     final raw = plan.requiredPerPeriodCents;
-    final rounded = ((raw + 999) ~/ 1000) * 1000;
+    final rounded = SavingsCalculator.roundUpPerPeriod(raw, c.frequency);
     final suggestions = <int>[rounded, rounded * 2, rounded * 5];
     // If remaining is smaller than 10x, include it as a "finish now" option.
     if (remaining < rounded * 10) {
@@ -176,21 +185,127 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
     _submitted = true;
     _draftTimer?.cancel();
 
-    final savingsRepo = ref.read(savingsRepositoryProvider);
+    final progression = ref.read(progressionServiceProvider);
+    try {
+      final outcome = await progression.recordCheckin(
+        challengeId: c.id,
+        amountCents: _amountCents,
+        note: _noteController.text.trim().isEmpty
+            ? null
+            : _noteController.text.trim(),
+        proofPath: _proofPath,
+      );
 
-    await savingsRepo.create(
-      challengeId: c.id,
-      amountCents: _amountCents,
-      note: _noteController.text.trim().isEmpty
-          ? null
-          : _noteController.text.trim(),
-      proofPath: _proofPath,
+      await DraftService.clear(c.id);
+
+      if (!mounted) return;
+      final profile = await ref.read(profileRepositoryProvider).get();
+      final locale = profile?.locale ?? 'en';
+      final dramatic = profile?.systemVoiceEnabled ?? true;
+
+      await _showOutcome(outcome, dramatic: dramatic, locale: locale);
+      // Milestone alerts (Phase 10): fire for crossed thresholds when the
+      // player has reminders enabled. Each send is logged to the DB.
+      if (profile?.notificationsEnabled ?? false) {
+        final notifs = ref.read(notificationServiceProvider);
+        for (final m in outcome.milestonesCrossed) {
+          await notifs.showMilestone(
+            title: _milestoneTitle(m, dramatic: dramatic, locale: locale),
+            body: SystemVoice.milestoneBody(m, c.name,
+                dramatic: dramatic, locale: locale),
+            challengeId: c.id,
+            type: _milestoneType(m),
+          );
+        }
+      }
+      // Celebration moment (Phase 09): one dramatic dialog per unlock.
+      for (final a in outcome.newlyUnlocked) {
+        if (!mounted) break;
+        await AchievementCelebrationDialog.show(
+          context,
+          achievement: a,
+          locale: locale,
+          dramatic: dramatic,
+        );
+      }
+      if (!mounted) return;
+      Navigator.of(context).pop(true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _saving = false;
+        _submitted = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('$e', style: IponTypography.label),
+          backgroundColor: IponColors.danger,
+        ),
+      );
+    }
+  }
+
+  String _milestoneType(double m) => switch (m) {
+        0.25 => 'milestone_25',
+        0.5 => 'milestone_50',
+        0.75 => 'milestone_75',
+        0.9 => 'milestone_90',
+        _ => 'quest_complete',
+      };
+
+  String _milestoneTitle(double m,
+          {required bool dramatic, required String locale}) =>
+      switch (m) {
+        0.9 => dramatic ? '[ ALMOST THERE ]' : 'Almost there',
+        1.0 => SystemVoice.questCompleteTitle(
+            dramatic: dramatic, locale: locale),
+        _ => dramatic ? '[ QUEST MILESTONE ]' : 'Quest milestone',
+      };
+
+  /// Reports the check-in result back to the player, System style.
+  Future<void> _showOutcome(CheckinOutcome o,
+      {required bool dramatic, required String locale}) async {
+    final lines = <String>[
+      '+${MoneyFormatter.format(_amountCents)} SAVED',
+    ];
+    if (o.firstQualifyingToday) {
+      lines.add(SystemVoice.firstCheckinLine(
+          dramatic: dramatic, locale: locale));
+    } else {
+      lines.add(SystemVoice.noXpLine(dramatic: dramatic, locale: locale));
+    }
+    if (o.questCompleted) {
+      lines.add(
+          '[ QUEST COMPLETE! ] +${XpService.completionXp} XP');
+    }
+    if (o.leveledUp) {
+      lines.add(SystemVoice.levelUpLine(o.newLevel,
+          dramatic: dramatic, locale: locale));
+    }
+    if (o.rankedUp) {
+      final title =
+          XpService.ranks.firstWhere((r) => r.rank == o.newRank).title;
+      lines.add(SystemVoice.rankUpLine(o.newRank, title,
+          dramatic: dramatic, locale: locale));
+    }
+    // Newly unlocked achievements get their own celebration dialog
+    // (Phase 09) instead of a line here.
+
+    final accent = o.questCompleted || o.rankedUp
+        ? IponColors.gold
+        : o.leveledUp
+            ? IponColors.success
+            : IponColors.frameOuter;
+
+    await SystemNoticeDialog.show(
+      context,
+      title: o.questCompleted
+          ? SystemVoice.questCompleteTitle(
+              dramatic: dramatic, locale: locale)
+          : SystemVoice.checkinTitle(dramatic: dramatic, locale: locale),
+      lines: lines,
+      accent: accent,
     );
-
-    await DraftService.clear(c.id);
-
-    if (!mounted) return;
-    Navigator.of(context).pop(true);
   }
 
   Future<void> _cancel() async {
@@ -205,6 +320,8 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
   Widget build(BuildContext context) {
     final remaining = c.targetAmountCents - c.currentAmountCents;
     final suggestions = _suggestedAmounts();
+    final locale = ref.watch(localeProvider);
+    String t(String key) => AppStrings.of(key, locale);
 
     return Scaffold(
       backgroundColor: IponColors.bgVoid,
@@ -213,7 +330,7 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: SystemWindowFrame(
-              title: 'SAVINGS CHECK-IN',
+              title: t(AppStrings.checkinTitle),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -254,12 +371,12 @@ class _CheckinScreenState extends ConsumerState<CheckinScreen> {
                   ],
                   const SizedBox(height: 24),
                   SystemButton(
-                    label: _saving ? 'SAVING...' : 'CONFIRM SAVINGS',
+                    label: _saving ? 'SAVING...' : t(AppStrings.confirmSavings),
                     onPressed: _saving ? null : _submit,
                   ),
                   const SizedBox(height: 12),
                   SystemButton(
-                    label: 'CANCEL',
+                    label: t(AppStrings.cancel),
                     onPressed: _saving ? null : _cancel,
                   ),
                 ],

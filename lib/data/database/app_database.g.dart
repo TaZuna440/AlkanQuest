@@ -1525,6 +1525,16 @@ class $UserProfilesTable extends UserProfiles
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("onboarding_complete" IN (0, 1))'),
       defaultValue: const Constant(false));
+  static const VerificationMeta _systemVoiceEnabledMeta =
+      const VerificationMeta('systemVoiceEnabled');
+  @override
+  late final GeneratedColumn<bool> systemVoiceEnabled = GeneratedColumn<bool>(
+      'system_voice_enabled', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("system_voice_enabled" IN (0, 1))'),
+      defaultValue: const Constant(true));
   static const VerificationMeta _createdAtMeta =
       const VerificationMeta('createdAt');
   @override
@@ -1548,6 +1558,7 @@ class $UserProfilesTable extends UserProfiles
         notificationDeclineCount,
         lastNotificationPrompt,
         onboardingComplete,
+        systemVoiceEnabled,
         createdAt
       ];
   @override
@@ -1644,6 +1655,12 @@ class $UserProfilesTable extends UserProfiles
           onboardingComplete.isAcceptableOrUnknown(
               data['onboarding_complete']!, _onboardingCompleteMeta));
     }
+    if (data.containsKey('system_voice_enabled')) {
+      context.handle(
+          _systemVoiceEnabledMeta,
+          systemVoiceEnabled.isAcceptableOrUnknown(
+              data['system_voice_enabled']!, _systemVoiceEnabledMeta));
+    }
     if (data.containsKey('created_at')) {
       context.handle(_createdAtMeta,
           createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
@@ -1692,6 +1709,8 @@ class $UserProfilesTable extends UserProfiles
           data['${effectivePrefix}last_notification_prompt']),
       onboardingComplete: attachedDatabase.typeMapping.read(
           DriftSqlType.bool, data['${effectivePrefix}onboarding_complete'])!,
+      systemVoiceEnabled: attachedDatabase.typeMapping.read(
+          DriftSqlType.bool, data['${effectivePrefix}system_voice_enabled'])!,
       createdAt: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
@@ -1719,6 +1738,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
   final int notificationDeclineCount;
   final DateTime? lastNotificationPrompt;
   final bool onboardingComplete;
+  final bool systemVoiceEnabled;
   final DateTime createdAt;
   const UserProfile(
       {required this.id,
@@ -1736,6 +1756,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       required this.notificationDeclineCount,
       this.lastNotificationPrompt,
       required this.onboardingComplete,
+      required this.systemVoiceEnabled,
       required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1760,6 +1781,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           Variable<DateTime>(lastNotificationPrompt);
     }
     map['onboarding_complete'] = Variable<bool>(onboardingComplete);
+    map['system_voice_enabled'] = Variable<bool>(systemVoiceEnabled);
     map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
@@ -1785,6 +1807,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ? const Value.absent()
           : Value(lastNotificationPrompt),
       onboardingComplete: Value(onboardingComplete),
+      systemVoiceEnabled: Value(systemVoiceEnabled),
       createdAt: Value(createdAt),
     );
   }
@@ -1812,6 +1835,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       lastNotificationPrompt:
           serializer.fromJson<DateTime?>(json['lastNotificationPrompt']),
       onboardingComplete: serializer.fromJson<bool>(json['onboardingComplete']),
+      systemVoiceEnabled: serializer.fromJson<bool>(json['systemVoiceEnabled']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
@@ -1837,6 +1861,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       'lastNotificationPrompt':
           serializer.toJson<DateTime?>(lastNotificationPrompt),
       'onboardingComplete': serializer.toJson<bool>(onboardingComplete),
+      'systemVoiceEnabled': serializer.toJson<bool>(systemVoiceEnabled),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
@@ -1857,6 +1882,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           int? notificationDeclineCount,
           Value<DateTime?> lastNotificationPrompt = const Value.absent(),
           bool? onboardingComplete,
+          bool? systemVoiceEnabled,
           DateTime? createdAt}) =>
       UserProfile(
         id: id ?? this.id,
@@ -1878,6 +1904,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
             ? lastNotificationPrompt.value
             : this.lastNotificationPrompt,
         onboardingComplete: onboardingComplete ?? this.onboardingComplete,
+        systemVoiceEnabled: systemVoiceEnabled ?? this.systemVoiceEnabled,
         createdAt: createdAt ?? this.createdAt,
       );
   UserProfile copyWithCompanion(UserProfilesCompanion data) {
@@ -1915,6 +1942,9 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       onboardingComplete: data.onboardingComplete.present
           ? data.onboardingComplete.value
           : this.onboardingComplete,
+      systemVoiceEnabled: data.systemVoiceEnabled.present
+          ? data.systemVoiceEnabled.value
+          : this.systemVoiceEnabled,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
   }
@@ -1937,6 +1967,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           ..write('notificationDeclineCount: $notificationDeclineCount, ')
           ..write('lastNotificationPrompt: $lastNotificationPrompt, ')
           ..write('onboardingComplete: $onboardingComplete, ')
+          ..write('systemVoiceEnabled: $systemVoiceEnabled, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
@@ -1959,6 +1990,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
       notificationDeclineCount,
       lastNotificationPrompt,
       onboardingComplete,
+      systemVoiceEnabled,
       createdAt);
   @override
   bool operator ==(Object other) =>
@@ -1979,6 +2011,7 @@ class UserProfile extends DataClass implements Insertable<UserProfile> {
           other.notificationDeclineCount == this.notificationDeclineCount &&
           other.lastNotificationPrompt == this.lastNotificationPrompt &&
           other.onboardingComplete == this.onboardingComplete &&
+          other.systemVoiceEnabled == this.systemVoiceEnabled &&
           other.createdAt == this.createdAt);
 }
 
@@ -1998,6 +2031,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
   final Value<int> notificationDeclineCount;
   final Value<DateTime?> lastNotificationPrompt;
   final Value<bool> onboardingComplete;
+  final Value<bool> systemVoiceEnabled;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
   const UserProfilesCompanion({
@@ -2016,6 +2050,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.notificationDeclineCount = const Value.absent(),
     this.lastNotificationPrompt = const Value.absent(),
     this.onboardingComplete = const Value.absent(),
+    this.systemVoiceEnabled = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -2035,6 +2070,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     this.notificationDeclineCount = const Value.absent(),
     this.lastNotificationPrompt = const Value.absent(),
     this.onboardingComplete = const Value.absent(),
+    this.systemVoiceEnabled = const Value.absent(),
     required DateTime createdAt,
     this.rowid = const Value.absent(),
   })  : id = Value(id),
@@ -2056,6 +2092,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     Expression<int>? notificationDeclineCount,
     Expression<DateTime>? lastNotificationPrompt,
     Expression<bool>? onboardingComplete,
+    Expression<bool>? systemVoiceEnabled,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
   }) {
@@ -2079,6 +2116,8 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       if (lastNotificationPrompt != null)
         'last_notification_prompt': lastNotificationPrompt,
       if (onboardingComplete != null) 'onboarding_complete': onboardingComplete,
+      if (systemVoiceEnabled != null)
+        'system_voice_enabled': systemVoiceEnabled,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -2100,6 +2139,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       Value<int>? notificationDeclineCount,
       Value<DateTime?>? lastNotificationPrompt,
       Value<bool>? onboardingComplete,
+      Value<bool>? systemVoiceEnabled,
       Value<DateTime>? createdAt,
       Value<int>? rowid}) {
     return UserProfilesCompanion(
@@ -2121,6 +2161,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
       lastNotificationPrompt:
           lastNotificationPrompt ?? this.lastNotificationPrompt,
       onboardingComplete: onboardingComplete ?? this.onboardingComplete,
+      systemVoiceEnabled: systemVoiceEnabled ?? this.systemVoiceEnabled,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
     );
@@ -2177,6 +2218,9 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
     if (onboardingComplete.present) {
       map['onboarding_complete'] = Variable<bool>(onboardingComplete.value);
     }
+    if (systemVoiceEnabled.present) {
+      map['system_voice_enabled'] = Variable<bool>(systemVoiceEnabled.value);
+    }
     if (createdAt.present) {
       map['created_at'] = Variable<DateTime>(createdAt.value);
     }
@@ -2204,6 +2248,7 @@ class UserProfilesCompanion extends UpdateCompanion<UserProfile> {
           ..write('notificationDeclineCount: $notificationDeclineCount, ')
           ..write('lastNotificationPrompt: $lastNotificationPrompt, ')
           ..write('onboardingComplete: $onboardingComplete, ')
+          ..write('systemVoiceEnabled: $systemVoiceEnabled, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -3742,6 +3787,7 @@ typedef $$UserProfilesTableCreateCompanionBuilder = UserProfilesCompanion
   Value<int> notificationDeclineCount,
   Value<DateTime?> lastNotificationPrompt,
   Value<bool> onboardingComplete,
+  Value<bool> systemVoiceEnabled,
   required DateTime createdAt,
   Value<int> rowid,
 });
@@ -3762,6 +3808,7 @@ typedef $$UserProfilesTableUpdateCompanionBuilder = UserProfilesCompanion
   Value<int> notificationDeclineCount,
   Value<DateTime?> lastNotificationPrompt,
   Value<bool> onboardingComplete,
+  Value<bool> systemVoiceEnabled,
   Value<DateTime> createdAt,
   Value<int> rowid,
 });
@@ -3824,6 +3871,10 @@ class $$UserProfilesTableFilterComposer
 
   ColumnFilters<bool> get onboardingComplete => $composableBuilder(
       column: $table.onboardingComplete,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get systemVoiceEnabled => $composableBuilder(
+      column: $table.systemVoiceEnabled,
       builder: (column) => ColumnFilters(column));
 
   ColumnFilters<DateTime> get createdAt => $composableBuilder(
@@ -3892,6 +3943,10 @@ class $$UserProfilesTableOrderingComposer
       column: $table.onboardingComplete,
       builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<bool> get systemVoiceEnabled => $composableBuilder(
+      column: $table.systemVoiceEnabled,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<DateTime> get createdAt => $composableBuilder(
       column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
@@ -3950,6 +4005,9 @@ class $$UserProfilesTableAnnotationComposer
   GeneratedColumn<bool> get onboardingComplete => $composableBuilder(
       column: $table.onboardingComplete, builder: (column) => column);
 
+  GeneratedColumn<bool> get systemVoiceEnabled => $composableBuilder(
+      column: $table.systemVoiceEnabled, builder: (column) => column);
+
   GeneratedColumn<DateTime> get createdAt =>
       $composableBuilder(column: $table.createdAt, builder: (column) => column);
 }
@@ -3995,6 +4053,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             Value<int> notificationDeclineCount = const Value.absent(),
             Value<DateTime?> lastNotificationPrompt = const Value.absent(),
             Value<bool> onboardingComplete = const Value.absent(),
+            Value<bool> systemVoiceEnabled = const Value.absent(),
             Value<DateTime> createdAt = const Value.absent(),
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4014,6 +4073,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             notificationDeclineCount: notificationDeclineCount,
             lastNotificationPrompt: lastNotificationPrompt,
             onboardingComplete: onboardingComplete,
+            systemVoiceEnabled: systemVoiceEnabled,
             createdAt: createdAt,
             rowid: rowid,
           ),
@@ -4033,6 +4093,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             Value<int> notificationDeclineCount = const Value.absent(),
             Value<DateTime?> lastNotificationPrompt = const Value.absent(),
             Value<bool> onboardingComplete = const Value.absent(),
+            Value<bool> systemVoiceEnabled = const Value.absent(),
             required DateTime createdAt,
             Value<int> rowid = const Value.absent(),
           }) =>
@@ -4052,6 +4113,7 @@ class $$UserProfilesTableTableManager extends RootTableManager<
             notificationDeclineCount: notificationDeclineCount,
             lastNotificationPrompt: lastNotificationPrompt,
             onboardingComplete: onboardingComplete,
+            systemVoiceEnabled: systemVoiceEnabled,
             createdAt: createdAt,
             rowid: rowid,
           ),

@@ -12,6 +12,11 @@ class ProfileRepository {
       (_db.select(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
           .getSingleOrNull();
 
+  /// Live stream of the singleton profile (emits on every update).
+  Stream<UserProfile?> watch() =>
+      (_db.select(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .watchSingleOrNull();
+
   Future<UserProfile> getOrCreate() async {
     final existing = await get();
     if (existing != null) return existing;
@@ -31,6 +36,37 @@ class ProfileRepository {
   Future<void> updateDisplayName(String name) =>
       (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
           .write(UserProfilesCompanion(displayName: Value(name)));
+
+  Future<void> updateLocale(String locale) =>
+      (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .write(UserProfilesCompanion(locale: Value(locale)));
+
+  Future<void> updateSystemVoice(bool enabled) =>
+      (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .write(
+              UserProfilesCompanion(systemVoiceEnabled: Value(enabled)));
+
+  Future<void> updateNotificationsEnabled(bool enabled) =>
+      (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .write(
+              UserProfilesCompanion(notificationsEnabled: Value(enabled)));
+
+  Future<void> updateReminderTime(String hhmm) =>
+      (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))
+          .write(UserProfilesCompanion(dailyReminderTime: Value(hhmm)));
+
+  Future<void> recordNotificationDecline() async {
+    final profile = await getOrCreate();
+    await (_db.update(_db.userProfiles)
+          ..where((t) => t.id.equals(singletonId)))
+        .write(
+      UserProfilesCompanion(
+        notificationDeclineCount:
+            Value(profile.notificationDeclineCount + 1),
+        lastNotificationPrompt: Value(DateTime.now().toUtc()),
+      ),
+    );
+  }
 
   Future<void> markOnboardingComplete() =>
       (_db.update(_db.userProfiles)..where((t) => t.id.equals(singletonId)))

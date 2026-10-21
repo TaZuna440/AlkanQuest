@@ -21,6 +21,8 @@ class UserProfiles extends Table {
   DateTimeColumn get lastNotificationPrompt => dateTime().nullable()();
   BoolColumn get onboardingComplete =>
       boolean().withDefault(const Constant(false))();
+  BoolColumn get systemVoiceEnabled =>
+      boolean().withDefault(const Constant(true))();
   DateTimeColumn get createdAt => dateTime()();
 
   @override

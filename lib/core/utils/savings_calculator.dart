@@ -181,6 +181,19 @@ class SavingsCalculator {
     return ref.add(Duration(days: finalDays));
   }
 
+  /// Rounding rule per spec A5: round the suggested per-period amount UP to
+  /// the nearest ₱10 (daily/flexible), ₱50 (weekly), or ₱100 (monthly).
+  /// Input and output are integer centavos.
+  static int roundUpPerPeriod(int cents, String frequency) {
+    if (cents <= 0) return 0;
+    final step = switch (frequency) {
+      'weekly' => 5000, // ₱50
+      'monthly' => 10000, // ₱100
+      _ => 1000, // ₱10 — daily & flexible
+    };
+    return ((cents + step - 1) ~/ step) * step;
+  }
+
   static String _periodLabel(String frequency) {
     switch (frequency) {
       case 'daily':
