@@ -15,7 +15,7 @@
 - **Localization** (`lib/l10n/app_strings.dart`): key UI strings in English + Filipino — bottom-nav labels, screen titles, main headers, primary buttons (~40 keys). `localeProvider` reads `UserProfile.locale`.
 - **System voice** (`lib/l10n/system_voice.dart`): dramatic vs plain wording × en/fil for check-in results, level/rank-ups, milestones, reminders, achievement celebrations. `systemVoiceProvider` reads `UserProfile.systemVoiceEnabled`. Check-in flow, milestone notifications, reminder body, and celebration dialogs all honor both settings.
 - **Reminder permission flow** (settings toggle): soft rationale dialog → system permission request → on grant, persist + schedule; on deny, record decline (`notificationDeclineCount`); after two declines the toggle points at system settings instead of re-prompting.
-- **ExportService** (`lib/core/services/export_service.dart`): builds `ipon_quests.csv` / `ipon_checkins.csv` (centavos + pesos columns, ISO dates, proper CSV escaping) and shares via `SharePlus.instance.share`.
+- **ExportService** (`lib/core/services/export_service.dart`): builds `alkanquest_quests.csv` / `alkanquest_checkins.csv` (centavos + pesos columns, ISO dates, proper CSV escaping) and shares via `SharePlus.instance.share`.
 
 ## Out of Scope
 

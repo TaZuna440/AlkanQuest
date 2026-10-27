@@ -1,8 +1,8 @@
-# Ipon System — User Manual
+# AlkanQuest — User Manual
 
-**Level up your savings.** Ipon System turns saving money into Solo Leveling-style quests. You create savings quests, log check-ins when you save, earn XP, climb ranks from E to S, and unlock achievements.
+**Level up your savings.** AlkanQuest turns saving money into Solo Leveling-style quests. You create savings quests, log check-ins when you save, earn XP, climb ranks from E to S, and unlock achievements.
 
-> Ipon System is a habit tracker, **not** a bank, wallet, or investment app. Nobody verifies your savings — you report them honestly to yourself.
+> AlkanQuest is a habit tracker, **not** a bank, wallet, or investment app. Nobody verifies your savings — you report them honestly to yourself.
 
 ---
 
@@ -93,7 +93,7 @@ Tap any quest card to open its detail window:
 ## 9. FAQ / Troubleshooting
 
 **I didn't get my daily reminder.**
-→ Profile tab → make sure DAILY REMINDERS is on. If you declined the permission twice, Android won't ask again — enable notifications for Ipon System in your phone's Settings.
+→ Profile tab → make sure DAILY REMINDERS is on. If you declined the permission twice, Android won't ask again — enable notifications for AlkanQuest in your phone's Settings.
 
 **My quest says OVERDUE.**
 → The target date passed before you hit the target. Edit the quest to set a new date, or keep checking in — progress still counts.

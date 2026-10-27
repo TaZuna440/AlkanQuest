@@ -69,6 +69,10 @@ class IponValidators {
 
     final cents = MoneyFormatter.parseToCents(value!);
     if (cents == null || cents <= 0) return 'ENTER A VALID AMOUNT.';
+    if (cents < 10000) return 'TARGET MUST BE AT LEAST ₱100.';
+    if (cents % 10000 != 0) {
+      return 'TARGET MUST BE IN MULTIPLES OF ₱100 (e.g., 500, 1000).';
+    }
     return null;
   }
 

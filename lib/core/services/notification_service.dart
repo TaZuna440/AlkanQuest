@@ -48,7 +48,8 @@ class NotificationService {
       tz.setLocalLocation(tz.getLocation('Asia/Manila'));
     }
 
-    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const androidInit =
+        AndroidInitializationSettings('@drawable/ic_notification');
     const initSettings = InitializationSettings(android: androidInit);
     await _plugin.initialize(settings: initSettings);
     _initialized = true;

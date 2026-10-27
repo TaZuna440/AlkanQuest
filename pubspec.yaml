@@ -42,10 +42,19 @@ dev_dependencies:
   mocktail: ^1.0.0
   golden_toolkit: ^0.15.0
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/icons/app_icon.png
+  adaptive_icon_background: "#0A0512"
+  adaptive_icon_foreground: assets/icons/app_icon.png
 
 flutter:
   uses-material-design: true
   assets:
+    - assets/icons/app_icon.png
     - assets/icons/challenges/
     - assets/illustrations/
     - assets/animations/

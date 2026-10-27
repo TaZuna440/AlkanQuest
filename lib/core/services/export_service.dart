@@ -33,7 +33,8 @@ class ExportService {
         c.completedAt == null ? '' : _iso(c.completedAt!),
       ].join(','));
     }
-    await _shareCsv('ipon_quests.csv', rows.join('\n'), 'Ipon System quest history');
+    await _shareCsv(
+        'alkanquest_quests.csv', rows.join('\n'), 'AlkanQuest quest history');
   }
 
   static Future<void> exportCheckinsCsv(
@@ -55,7 +56,9 @@ class ExportService {
       ].join(','));
     }
     await _shareCsv(
-        'ipon_checkins.csv', rows.join('\n'), 'Ipon System check-in history');
+        'alkanquest_checkins.csv',
+        rows.join('\n'),
+        'AlkanQuest check-in history');
   }
 
   // ------------------------------------------------------------ internals

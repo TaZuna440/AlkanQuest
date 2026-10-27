@@ -81,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 const _InfoBox(
                   lines: [
-                    'IPON SYSTEM v1.0.0',
+                    'ALKANQUEST v1.0.0',
                     'Level up your savings.',
                     '',
                     'A gamified savings habit app — not a bank,',

@@ -20,7 +20,7 @@ class IponApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Ipon System',
+      title: 'AlkanQuest',
       debugShowCheckedModeBanner: false,
       theme: buildIponTheme(),
       home: const AppRoot(),

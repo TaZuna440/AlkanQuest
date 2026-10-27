@@ -1,4 +1,4 @@
-# IPON SYSTEM — Documentation
+# ALKANQUEST — Documentation
 
 Central documentation hub. All project knowledge lives here.
 

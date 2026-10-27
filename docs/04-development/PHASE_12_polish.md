@@ -6,7 +6,7 @@
 
 ## Scope
 
-- **Branding** — Android app label `ipon_system` → **Ipon System**; package/namespace/applicationId aligned to the spec: `com.iponsystem.app` (was `com.iponsystem.ipon_system`); `MainActivity` moved to the matching Kotlin package.
+- **Branding** — Android app label is **AlkanQuest**; package/namespace/applicationId aligned to the spec: `com.iponsystem.app` (was `com.iponsystem.ipon_system`); `MainActivity` moved to the matching Kotlin package.
 - **Code review fixes**:
   - `ProgressionService` milestone-flag update simplified (direct `copyWith` with `||`, no companion juggling); unused drift import removed.
   - `ProfileScreen` display-name edit: capture the controller text *before* dispose (was read after dispose).
@@ -20,7 +20,7 @@
 
 ## Tasks
 
-- [x] Align Android package to `com.iponsystem.app` + label to "Ipon System"
+- [x] Align Android package to `com.iponsystem.app` + label to "AlkanQuest"
 - [x] Simplify milestone-flag update in `ProgressionService`
 - [x] Fix controller-after-dispose bug in display-name edit
 - [x] Write `docs/USER_MANUAL.md`

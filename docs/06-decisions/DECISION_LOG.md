@@ -84,7 +84,7 @@ Every significant decision made during specification, with rationale.
 | G3 | YYYY.MM.DD in logs |
 | G4 | Western number format |
 | G5 | Ipon, Alkansya, Kaya mo yan |
-| G6 | Ipon System final |
+| G6 | AlkanQuest final |
 
 ## Section H - Proof & Media
 

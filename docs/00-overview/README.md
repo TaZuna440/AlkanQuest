@@ -2,7 +2,7 @@
 
 ## What Is This?
 
-**Ipon System** — a gamified savings app for Filipino users. Turns saving money into quests. Inspired by Solo Leveling's System Window.
+**AlkanQuest** — a gamified savings app for Filipino users. Turns saving money into quests. Inspired by Solo Leveling's System Window.
 
 ## Core Concept
 

@@ -36,7 +36,7 @@ class DashboardTab extends ConsumerWidget {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: SystemWindowFrame(
-            title: t(AppStrings.statusTitle),
+            title: t(AppStrings.navDashboard),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -75,8 +75,9 @@ class DashboardTab extends ConsumerWidget {
                         ],
                         const SizedBox(height: 8),
                         _CreateButton(
-                          label: t(AppStrings.newQuest),
-                          onTap: () => _openCreate(context),
+                          label: t(AppStrings.logSavings),
+                          onTap: () =>
+                              _openCheckin(context, challenges, locale),
                         ),
                       ],
                     );
@@ -93,6 +94,45 @@ class DashboardTab extends ConsumerWidget {
   Future<void> _openCreate(BuildContext context) {
     return Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const CreateChallengeScreen()),
+    );
+  }
+
+  Future<void> _openCheckin(
+    BuildContext context,
+    List<Challenge> challenges,
+    String locale,
+  ) async {
+    final challenge = challenges.length == 1
+        ? challenges.single
+        : await showDialog<Challenge>(
+            context: context,
+            builder: (dialogContext) => AlertDialog(
+              backgroundColor: IponColors.bgIndigo,
+              title: Text(
+                AppStrings.of(AppStrings.selectQuest, locale),
+                style: IponTypography.header,
+              ),
+              content: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 360),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      for (final quest in challenges)
+                        ListTile(
+                          title: Text(quest.name, style: IponTypography.body),
+                          onTap: () => Navigator.of(dialogContext).pop(quest),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+
+    if (challenge == null || !context.mounted) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => CheckinScreen(challenge: challenge)),
     );
   }
 }
@@ -181,7 +221,8 @@ class _StatusHeader extends StatelessWidget {
         const SizedBox(height: 6),
         Text(
           '${_fmtNum(totalXp)} XP',
-          style: IponTypography.label.copyWith(fontSize: 11),
+          style: IponTypography.label
+              .copyWith(fontSize: 11, color: IponColors.textSecondary),
         ),
         const SizedBox(height: 16),
         Row(
@@ -235,13 +276,24 @@ class _XpBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isEmpty = value <= 0;
     return Container(
       height: 10,
       decoration: BoxDecoration(
         color: IponColors.bgPlum,
         border: Border.all(
-          color: IponColors.frameInner.withValues(alpha: 0.25),
+          color: isEmpty
+              ? IponColors.frameOuter.withValues(alpha: 0.65)
+              : IponColors.frameInner.withValues(alpha: 0.25),
         ),
+        boxShadow: isEmpty
+            ? [
+                BoxShadow(
+                  color: IponColors.frameOuter.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                ),
+              ]
+            : null,
       ),
       child: Align(
         alignment: Alignment.centerLeft,
@@ -285,7 +337,7 @@ class _StatBox extends StatelessWidget {
           Text(
             label,
             style: IponTypography.label
-                .copyWith(fontSize: 9, color: IponColors.textDim),
+                .copyWith(fontSize: 9, color: IponColors.textSecondary),
             textAlign: TextAlign.center,
           ),
         ],

@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: const Text('IPON SYSTEM',
+              child: const Text('ALKANQUEST',
                   style: IponTypography.windowTitle),
             ),
             const SizedBox(height: 32),

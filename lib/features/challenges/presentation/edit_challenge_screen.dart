@@ -193,10 +193,7 @@ class _EditChallengeScreenState extends ConsumerState<EditChallengeScreen> {
                       controller: _targetController,
                       keyboardType: TextInputType.number,
                       prefix: '₱ ',
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(
-                            RegExp(r'[0-9.,]')),
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       validator: _validateTarget,
                     ),
                     const SizedBox(height: 16),
@@ -209,8 +206,7 @@ class _EditChallengeScreenState extends ConsumerState<EditChallengeScreen> {
                             horizontal: 12, vertical: 16),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: IponColors.frameInner
-                                .withValues(alpha: 0.5),
+                            color: IponColors.frameInner.withValues(alpha: 0.5),
                           ),
                         ),
                         child: Row(
@@ -284,8 +280,7 @@ class _EditChallengeScreenState extends ConsumerState<EditChallengeScreen> {
         focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: IponColors.danger),
         ),
-        errorStyle:
-            IponTypography.label.copyWith(color: IponColors.danger),
+        errorStyle: IponTypography.label.copyWith(color: IponColors.danger),
       ),
     );
   }
@@ -299,11 +294,9 @@ class _EditChallengeScreenState extends ConsumerState<EditChallengeScreen> {
         final selected = _frequency == f;
         final enabled = SavingsCalculator.frequencyFits(f, days);
         return InkWell(
-          onTap:
-              enabled ? () => setState(() => _frequency = f) : null,
+          onTap: enabled ? () => setState(() => _frequency = f) : null,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(
                 color: selected

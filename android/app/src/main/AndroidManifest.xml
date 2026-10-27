@@ -2,7 +2,7 @@
     <!-- Phase 10: daily check-in reminders + quest milestone alerts. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
-        android:label="Ipon System"
+        android:label="AlkanQuest"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

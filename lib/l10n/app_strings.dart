@@ -25,6 +25,8 @@ class AppStrings {
   static const dashboardNoQuestsBody = 'dashboard_no_quests_body';
   static const newQuest = 'new_quest';
   static const createQuest = 'create_quest';
+  static const logSavings = 'log_savings';
+  static const selectQuest = 'select_quest';
   static const iSavedIt = 'i_saved_it';
   static const suggested = 'suggested';
   static const remaining = 'remaining';
@@ -63,6 +65,8 @@ class AppStrings {
           'Accept your first quest to begin your Ipon journey.',
       newQuest: '+ NEW QUEST',
       createQuest: '+ CREATE QUEST',
+      logSavings: "LOG TODAY'S SAVINGS",
+      selectQuest: 'SELECT A QUEST',
       iSavedIt: '+ I SAVED IT',
       suggested: 'SUGGESTED',
       remaining: 'REMAINING',
@@ -100,6 +104,8 @@ class AppStrings {
           'Tanggapin ang iyong unang quest para simulan ang iyong pag-iipon.',
       newQuest: '+ BAGONG QUEST',
       createQuest: '+ GUMAWA NG QUEST',
+      logSavings: 'I-LOG ANG IPON NGAYON',
+      selectQuest: 'PUMILI NG QUEST',
       iSavedIt: '+ NAG-IPON AKO',
       suggested: 'MUNGKAHI',
       remaining: 'NATITIRA',

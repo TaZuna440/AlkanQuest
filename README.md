@@ -39,7 +39,7 @@ A gamified personal savings app for Filipino users — inspired by Solo Leveling
 
 ### 1.1 Product Name
 
-**Ipon System**
+**AlkanQuest**
 
 Inspired by the Solo Leveling "System" concept. "Ipon" is a Filipino term for saving money. The app turns saving into a gamified challenge experience.
 
@@ -77,7 +77,7 @@ Many people want to save money but struggle with:
 - No visual progress representation
 - Abandoning challenges mid-way
 
-Traditional finance apps focus on **tracking money**. Ipon System focuses on **motivating users to save consistently**.
+Traditional finance apps focus on **tracking money**. AlkanQuest focuses on **motivating users to save consistently**.
 
 ### 2.2 The Solution
 
@@ -130,7 +130,7 @@ Optional proof images (screenshot, photo) are treated as **personal accountabili
 
 ### 3.3 One-Sentence Product Definition
 
-> **Ipon System is a gamified savings app that turns saving money into achievable quests, tracks progress, builds habits, and celebrates milestones — all wrapped in a Solo Leveling-inspired System Window.**
+> **AlkanQuest is a gamified savings app that turns saving money into achievable quests, tracks progress, builds habits, and celebrates milestones — all wrapped in a Solo Leveling-inspired System Window.**
 
 ---
 
@@ -290,4 +290,3 @@ EOF
 - Optional "System Voice" toggle in Settings → falls back to friendly tone
 
 ### D3. Home Dashboard — "Status Window"
-

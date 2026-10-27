@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,8 +35,7 @@ class CreateChallengeScreen extends ConsumerStatefulWidget {
       _CreateChallengeScreenState();
 }
 
-class _CreateChallengeScreenState
-    extends ConsumerState<CreateChallengeScreen> {
+class _CreateChallengeScreenState extends ConsumerState<CreateChallengeScreen> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _targetController = TextEditingController();
@@ -73,9 +71,8 @@ class _CreateChallengeScreenState
   int get _startingCents =>
       MoneyFormatter.parseToCents(_startingController.text) ?? 0;
 
-  int get _daysRemaining => _targetDate == null
-      ? 0
-      : SavingsCalculator.daysUntil(_targetDate!);
+  int get _daysRemaining =>
+      _targetDate == null ? 0 : SavingsCalculator.daysUntil(_targetDate!);
 
   bool _frequencyEnabled(String f) {
     if (_targetDate == null) return true; // no date yet, allow any
@@ -111,8 +108,7 @@ class _CreateChallengeScreenState
   void _onNameChanged(String _) {
     setState(() {
       if (_touchedName || _nameController.text.isNotEmpty) {
-        _nameError =
-            IponValidators.validateChallengeName(_nameController.text);
+        _nameError = IponValidators.validateChallengeName(_nameController.text);
       }
     });
   }
@@ -179,8 +175,8 @@ class _CreateChallengeScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('COULD NOT LOAD IMAGE: $e',
-                style: IponTypography.label),
+            content:
+                Text('COULD NOT LOAD IMAGE: $e', style: IponTypography.label),
             backgroundColor: IponColors.danger,
           ),
         );
@@ -252,8 +248,7 @@ class _CreateChallengeScreenState
       _touchedName = true;
       _touchedTarget = true;
       _touchedStarting = true;
-      _nameError =
-          IponValidators.validateChallengeName(_nameController.text);
+      _nameError = IponValidators.validateChallengeName(_nameController.text);
       _targetError =
           IponValidators.validateTargetAmount(_targetController.text);
       _dateError = IponValidators.validateTargetDate(_targetDate);
@@ -321,7 +316,19 @@ class _CreateChallengeScreenState
                     maxLines: 2,
                   ),
                   const SizedBox(height: 16),
-                  _label('TARGET AMOUNT'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _label('TARGET AMOUNT'),
+                      Text(
+                        'MULTIPLES OF 100 ONLY',
+                        style: IponTypography.label.copyWith(
+                          color: IponColors.textDim,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   _textField(
                     controller: _targetController,
@@ -330,9 +337,7 @@ class _CreateChallengeScreenState
                     errorText: _targetError,
                     keyboardType: TextInputType.number,
                     maxLength: 15,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: _onTargetChanged,
                   ),
                   const SizedBox(height: 16),
@@ -345,9 +350,7 @@ class _CreateChallengeScreenState
                     errorText: _startingError,
                     keyboardType: TextInputType.number,
                     maxLength: 15,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-                    ],
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: _onStartingChanged,
                   ),
                   const SizedBox(height: 16),
@@ -427,9 +430,8 @@ class _CreateChallengeScreenState
                   const SizedBox(height: 12),
                   SystemButton(
                     label: 'CANCEL',
-                    onPressed: _saving
-                        ? null
-                        : () => Navigator.of(context).pop(false),
+                    onPressed:
+                        _saving ? null : () => Navigator.of(context).pop(false),
                   ),
                 ],
               ),
@@ -488,9 +490,7 @@ class _CreateChallengeScreenState
           ),
           const SizedBox(height: 12),
           Text(
-            _iconPath == null
-                ? 'TAP TO UPLOAD IMAGE'
-                : 'TAP TO CHANGE IMAGE',
+            _iconPath == null ? 'TAP TO UPLOAD IMAGE' : 'TAP TO CHANGE IMAGE',
             style: IponTypography.label,
           ),
         ],
@@ -520,8 +520,7 @@ class _CreateChallengeScreenState
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle:
-            IponTypography.body.copyWith(color: IponColors.textDim),
+        hintStyle: IponTypography.body.copyWith(color: IponColors.textDim),
         prefixText: prefix,
         prefixStyle: IponTypography.value,
         counterStyle: IponTypography.label
@@ -535,9 +534,8 @@ class _CreateChallengeScreenState
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: errorText != null
-                ? IponColors.danger
-                : IponColors.frameOuter,
+            color:
+                errorText != null ? IponColors.danger : IponColors.frameOuter,
           ),
         ),
         errorBorder: const OutlineInputBorder(
@@ -547,8 +545,7 @@ class _CreateChallengeScreenState
           borderSide: BorderSide(color: IponColors.danger),
         ),
         errorText: errorText,
-        errorStyle:
-            IponTypography.label.copyWith(color: IponColors.danger),
+        errorStyle: IponTypography.label.copyWith(color: IponColors.danger),
       ),
     );
   }
@@ -596,14 +593,12 @@ class _CreateChallengeScreenState
         final selected = _frequency == f;
         final enabled = _frequencyEnabled(f);
         final minDays = SavingsCalculator.minDaysFor(f);
-        final needsMore =
-            !enabled && f != 'flexible' ? '${minDays}D+' : null;
+        final needsMore = !enabled && f != 'flexible' ? '${minDays}D+' : null;
 
         return InkWell(
           onTap: enabled ? () => setState(() => _frequency = f) : null,
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(
                 color: !enabled
@@ -615,8 +610,7 @@ class _CreateChallengeScreenState
               boxShadow: (enabled && selected)
                   ? [
                       BoxShadow(
-                        color:
-                            IponColors.frameOuter.withValues(alpha: 0.5),
+                        color: IponColors.frameOuter.withValues(alpha: 0.5),
                         blurRadius: 8,
                       ),
                     ]
@@ -670,14 +664,11 @@ class _CreateChallengeScreenState
               color: color,
               shape: BoxShape.circle,
               border: Border.all(
-                color: selected
-                    ? IponColors.textPrimary
-                    : Colors.transparent,
+                color: selected ? IponColors.textPrimary : Colors.transparent,
                 width: 2,
               ),
-              boxShadow: selected
-                  ? [BoxShadow(color: color, blurRadius: 12)]
-                  : null,
+              boxShadow:
+                  selected ? [BoxShadow(color: color, blurRadius: 12)] : null,
             ),
           ),
         );

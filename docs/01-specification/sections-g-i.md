@@ -9,7 +9,7 @@ G2. ₱ prefix, drop .00 when whole
 G3. YYYY.MM.DD in logs
 G4. Western number format
 G5. Ipon, Alkansya, Kaya mo 'yan
-G6. "Ipon System" — final name
+G6. "AlkanQuest" — final name
 
 ## Section H — Proof & Media
 H1. Local filesystem storage

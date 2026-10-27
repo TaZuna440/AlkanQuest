@@ -27,8 +27,7 @@ class SavingsPlanCard extends StatelessWidget {
             Expanded(
               child: Text(
                 'SET AMOUNT + DATE TO SEE YOUR PLAN.',
-                style: IponTypography.label
-                    .copyWith(color: IponColors.textDim),
+                style: IponTypography.label.copyWith(color: IponColors.textDim),
               ),
             ),
           ],
@@ -44,7 +43,12 @@ class SavingsPlanCard extends StatelessWidget {
       _ => IponColors.frameOuter,
     };
 
-    final perPeriod = MoneyFormatter.format(p.requiredPerPeriodCents);
+    final perPeriod = MoneyFormatter.format(
+      SavingsCalculator.roundUpPerPeriod(
+        p.requiredPerPeriodCents,
+        p.frequency,
+      ),
+    );
     final remaining = MoneyFormatter.format(p.remainingCents);
 
     final headline = p.requiredPerPeriodCents == 0
